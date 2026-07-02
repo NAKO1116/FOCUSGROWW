@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FocusGrow</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+
+    <div class="logo">
+
+      <img
+        src="logo.png"
+        alt="FocusGrow"
+        class="logo-image">
+
+    </div>
+
+</header>
+
+<main>
+
+    <aside class="left-panel">
+
+        <h2>継続記録・成長記録</h2>
+
+        <div class="card">
+
+            <h3>連続作業日数</h3>
+
+            <div class="days" id="streakDays">
+                1日
+            </div>
+
+            <p id="bestRecord">
+                ベスト記録：1日
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h3>成長の記録</h3>
+               
+                <p id="levelText">
+                   Lv.1
+                </p>
+
+                <p id="nextExp" class="next-evolution">
+                    次の進化まで あと0回
+                </p>
+
+        </div>
+ 
+        <div class="card">
+
+            <h3>ToDoリスト</h3>
+
+            <div class="todo-input-area">
+
+                <input
+                    type="text"
+                    id="todoInput"
+                    placeholder="やることを入力">
+
+                <button id="addTodoBtn">
+                    追加
+                </button>
+
+            </div>
+
+            <ul id="todoList"></ul>
+
+        </div>
+
+    </aside>
+
+<section class="center-panel">
+
+    <div class="character-stage">
+
+        <div id="timer" class="timer">
+            05:00
+        </div>
+
+        <div class="character">
+            <img
+                id="character"
+                src="character1.png"
+                alt="character">
+        </div>
+
+        <div class="timer-buttons">
+
+            <button id="startBtn">
+                スタート
+            </button>
+
+            <button id="resetBtn">
+                リセット
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+    <aside class="right-panel">
+
+        <h2>成長記録をみんなと共有</h2>
+
+        <div class="card share-card">
+
+         <h3 id="shareLevel">
+            Lv.1
+         </h3>
+
+         <p id="shareForm">
+            ミーネ
+         </p>
+
+    <button
+        id="shareBtn"
+        class="share-btn">
+
+        シェア
+
+    </button>
+
+</div>
+
+        </div>
+
+    </aside>
+
+</main>
+
+<footer>
+
+    <button
+       id="bgmBtn"
+       class="footer-btn">
+       🎵BGM ON
+    </button>
+
+</footer>
+
+<audio
+id="alarmSound"
+src="alarm.mp3">
+</audio>
+
+<audio
+    id="bgm"
+    src="bgm.mp3"
+    loop>
+</audio>
+
+<script src="script.js"></script>
+
+</body>
+</html>
