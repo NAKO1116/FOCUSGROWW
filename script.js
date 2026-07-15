@@ -4,6 +4,28 @@ let time = 300;
 let timer;
 let running = false;
 
+// ===== ストップウォッチ =====
+
+let overtime = 0;
+
+
+let longestFocus =
+Number(localStorage.getItem("longestFocus")) || 0;
+
+let todayFocus =
+Number(localStorage.getItem("todayFocus")) || 0;
+
+let weekFocus =
+Number(localStorage.getItem("weekFocus")) || 0;
+
+let lastDay =
+localStorage.getItem("lastDay") || "";
+
+let lastWeek =
+localStorage.getItem("lastWeek") || "";
+
+let overtimeMode = false;
+
 // ===== 成長 =====
 
 let level = Number(localStorage.getItem("level")) || 1;
@@ -41,6 +63,9 @@ Number(localStorage.getItem("streakDays")) || 1;
 let bestRecord =
 Number(localStorage.getItem("bestRecord")) || 1;
 
+let lastFocusDate =
+localStorage.getItem("lastFocusDate") || "";
+
 // ===== 集中回数 =====
 
 let focusCount =
@@ -64,14 +89,14 @@ document.getElementById("nextExp");
 const expBar =
 document.getElementById("expBar");
 
-const shareExpBar =
-document.getElementById("shareExpBar");
-
 const character =
 document.getElementById("character");
 
 const alarmSound =
 document.getElementById("alarmSound");
+
+const completeMessage =
+document.getElementById("completeMessage");
 
 // ===== BGM =====
 
@@ -89,7 +114,6 @@ function saveData(){
 
     localStorage.setItem("level",level);
     localStorage.setItem("exp",exp);
-    localStorage.setItem("maxExp",maxExp);
 
     localStorage.setItem(
         "streakDays",
@@ -99,6 +123,11 @@ function saveData(){
     localStorage.setItem(
         "bestRecord",
         bestRecord
+    );
+
+    localStorage.setItem(
+        "lastFocusDate",
+        lastFocusDate
     );
 
     localStorage.setItem(
@@ -180,20 +209,12 @@ function updateLevelUI(){
     const percent =
     (exp / maxExp) * 100;
 
+    expBar.style.width =
+    percent + "%";
+
     if(expBar){
 
         expBar.style.width =
-        percent + "%";
-    }
-
-    const shareBar =
-    document.getElementById(
-        "shareExpBar"
-    );
-
-    if(shareBar){
-
-        shareBar.style.width =
         percent + "%";
     }
 
@@ -218,12 +239,76 @@ function updateLevelUI(){
 
      }
 
-nextExp.textContent =
-`次の進化まで あと${remain}回`;
+    nextExp.textContent =
+    `次の進化まで あと${remain}回`;
     updateCharacter();
 
     saveData();
+
+    document.getElementById(
+    "shareBest"
+    ).textContent =
+    `最高連続作業日数：${bestRecord}日`;
+
+    document.getElementById(
+    "shareLongest"
+    ).textContent =
+    `最長集中時間：${formatTime(longestFocus)}`;
+
+    updateEvolutionUI();
 }
+
+function updateEvolutionUI(){
+
+    let current = 0;
+    let goal = 3;
+
+    if(focusCount < 3){
+
+        current = focusCount;
+        goal = 3;
+
+    }else if(focusCount < 10){
+
+        current = focusCount - 3;
+        goal = 7;
+
+    }else if(focusCount < 20){
+
+        current = focusCount - 10;
+        goal = 10;
+
+    }else{
+
+        current = 10;
+        goal = 10;
+
+    }
+
+    const percent = current / goal * 100;
+
+    document.getElementById("evolutionBar").style.width =
+        percent + "%";
+
+    document.getElementById("evolutionText").textContent =
+        `${current} / ${goal} 回`;
+
+    const remain = goal - current;
+
+    if(remain > 0){
+
+        document.getElementById("nextEvolution").textContent =
+            `✨ あと${remain}回集中すると進化！`;
+
+    }else{
+
+        document.getElementById("nextEvolution").textContent =
+            "🎉 進化可能！";
+
+    }
+
+}
+
 // ===== 経験値 =====
 
 function gainExp(amount){
@@ -250,14 +335,24 @@ function gainExp(amount){
 
 function updateTimer(){
 
-    const m =
-    Math.floor(time/60);
+    if(!overtimeMode){
 
-    const s =
-    time%60;
+        const m = Math.floor(time/60);
+        const s = time%60;
 
-    timerDisplay.textContent =
-    `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+        timerDisplay.textContent =
+        `${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+
+    }else{
+
+        const m = Math.floor(overtime/60);
+        const s = overtime%60;
+
+        timerDisplay.textContent =
+        `+${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+
+    }
+
 }
 
 document
@@ -270,34 +365,123 @@ document
 
     timer = setInterval(()=>{
 
+    if(!overtimeMode){
+
         time--;
 
-        updateTimer();
+    }else{
 
-        if(time <= 0){
+    overtime++;
 
-            clearInterval(timer);
+    todayFocus++;
 
-            running = false;
+weekFocus++;
 
-            gainExp(10);
+localStorage.setItem(
+    "todayFocus",
+    todayFocus
+);
 
-            // 集中回数追加
-            focusCount++;
+localStorage.setItem(
+    "weekFocus",
+    weekFocus
+);
+
+document.getElementById(
+    "todayFocus"
+).textContent =
+`今日：${formatTime(todayFocus)}`;
+
+document.getElementById(
+    "weekFocus"
+).textContent =
+`今週：${formatTime(weekFocus)}`;
+
+    if(overtime > longestFocus){
+
+        longestFocus = overtime;
+
+        localStorage.setItem(
+            "longestFocus",
+            longestFocus
+        );
+
+        document.getElementById(
+        "longestFocus"
+        ).textContent =
+        `最長集中時間：${formatTime(longestFocus)}`;
+
+        checkReset();
+
+        document.getElementById(
+        "todayFocus"
+        ).textContent =
+        `今日：${formatTime(todayFocus)}`;
+
+        document.getElementById(
+        "weekFocus"
+        ).textContent =
+        `今週：${formatTime(weekFocus)}`;
+    
+
+    }
+
+    
+
+}
+
+    updateTimer();
+
+    if(time <= 0 && !overtimeMode){
+
+        gainExp(10);
+
+        focusCount++;
+
+            updateEvolutionUI();
 
             // キャラ更新
             updateCharacter();
 
+            updateEvolutionUI();
+
             // 喜びモーション
              happyMotion();
 
-            streakDays++;
+            const today =
+            new Date().toDateString();
 
-            if(streakDays > bestRecord){
+            const yesterday =
+            new Date();
 
-                bestRecord =
-                streakDays;
-            }
+            yesterday.setDate(
+            yesterday.getDate()-1
+            );
+
+            const yesterdayString =
+            yesterday.toDateString();
+
+if(lastFocusDate !== today){
+
+    if(lastFocusDate === yesterdayString){
+
+        streakDays++;
+
+    }else{
+
+        streakDays = 1;
+
+    }
+
+    lastFocusDate = today;
+
+    if(streakDays > bestRecord){
+
+        bestRecord = streakDays;
+
+    }
+
+}
 
             document
             .getElementById(
@@ -314,14 +498,13 @@ document
             saveData();
             
             alarmSound.currentTime = 0;
-            
+
             alarmSound.play();
 
-            alert(
-            "5分集中達成！ EXP+10"
-            );
+            showCompleteMessage();
 
-            time = 300;
+            overtimeMode = true;
+            overtime = 0;
 
             updateTimer();
         }
@@ -329,6 +512,73 @@ document
     },1000);
 
 });
+
+function formatTime(sec){
+
+    const h =
+    Math.floor(sec/3600);
+
+    const m =
+    Math.floor((sec%3600)/60);
+
+    const s =
+    sec%60;
+
+    if(h>0){
+
+        return `${h}時間${m}分${s}秒`;
+
+    }
+
+    return `${m}分${s}秒`;
+
+}
+
+function checkReset(){
+
+    const now = new Date();
+
+    const today =
+    now.toLocaleDateString();
+
+    if(today != lastDay){
+
+        todayFocus = 0;
+
+        lastDay = today;
+
+        localStorage.setItem(
+            "todayFocus",
+            todayFocus
+        );
+
+        localStorage.setItem(
+            "lastDay",
+            lastDay
+        );
+
+    }
+
+    // 日曜日なら週リセット
+    if(now.getDay() == 0 && today != lastWeek){
+
+        weekFocus = 0;
+
+        lastWeek = today;
+
+        localStorage.setItem(
+            "weekFocus",
+            weekFocus
+        );
+
+        localStorage.setItem(
+            "lastWeek",
+            lastWeek
+        );
+
+    }
+
+}
 
 //==== リセット　====//
 
@@ -342,6 +592,10 @@ document
 
     time = 300;
 
+    overtime = 0;
+
+    overtimeMode = false;
+
     updateTimer();
 
 });
@@ -354,14 +608,21 @@ document
 .getElementById("shareBtn")
 .addEventListener("click",()=>{
 
-    const text =
-    `FocusGrowでLv.${level}まで成長しました！`;
+    html2canvas(document.getElementById("shareCard"))
+    .then(canvas=>{
 
-    navigator.clipboard.writeText(text);
+        const link =
+        document.createElement("a");
 
-    alert(
-    "シェア用テキストをコピーしました！"
-    );
+        link.download =
+        "FocusGrow.png";
+
+        link.href =
+        canvas.toDataURL("image/png");
+
+        link.click();
+
+    });
 
 });
 
@@ -381,6 +642,10 @@ document.getElementById(
 ).textContent =
 `ベスト記録：${bestRecord}日`;
 
+document.getElementById(
+    "longestFocus"
+).textContent =
+`最長集中時間：${formatTime(longestFocus)}`;
 // ===== ToDo =====
 
 let todos =
@@ -508,6 +773,18 @@ function happyMotion(){
 
 }
 
+function showCompleteMessage(){
+
+    completeMessage.classList.add("show");
+
+    setTimeout(()=>{
+
+        completeMessage.classList.remove("show");
+
+    },3000);
+
+}
+
 // ===== BGM ON/OFF =====
 
 bgm.volume = 0.3;
@@ -550,3 +827,24 @@ bgmBtn.addEventListener("click", async () => {
 // 画面サイズに合わせて縮小・拡大
 // =========================
 
+document
+.getElementById("helpBtn")
+.addEventListener("click",()=>{
+
+    alert(
+`FocusGrow
+
+5分集中を続けることで
+キャラクターが成長する
+作業支援サイトです。
+
+【できること】
+
+・5分タイマー
+・集中時間の記録
+・継続日数の管理
+・ToDo管理
+・成長記録の共有`
+    );
+
+});
