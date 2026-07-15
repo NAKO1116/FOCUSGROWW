@@ -83,12 +83,6 @@ document.getElementById("timer");
 const levelText =
 document.getElementById("levelText");
 
-const nextExp =
-document.getElementById("nextExp");
-
-const expBar =
-document.getElementById("expBar");
-
 const character =
 document.getElementById("character");
 
@@ -205,19 +199,6 @@ function updateLevelUI(){
     ).textContent =
     formName;
 
-    // 経験値バー
-    const percent =
-    (exp / maxExp) * 100;
-
-    expBar.style.width =
-    percent + "%";
-
-    if(expBar){
-
-        expBar.style.width =
-        percent + "%";
-    }
-
     // 次レベル表示
     let remain = 0;
 
@@ -238,9 +219,7 @@ function updateLevelUI(){
     remain = 20 - level;
 
      }
-
-    nextExp.textContent =
-    `次の進化まで あと${remain}回`;
+     
     updateCharacter();
 
     saveData();
@@ -438,8 +417,6 @@ document.getElementById(
 
         focusCount++;
 
-            updateEvolutionUI();
-
             // キャラ更新
             updateCharacter();
 
@@ -631,6 +608,7 @@ document
 updateTimer();
 updateLevelUI();
 updateCharacter();
+updateEvolutionUI();
 
 document.getElementById(
     "streakDays"
@@ -646,6 +624,16 @@ document.getElementById(
     "longestFocus"
 ).textContent =
 `最長集中時間：${formatTime(longestFocus)}`;
+
+document.getElementById(
+    "todayFocus"
+).textContent =
+`今日：${formatTime(todayFocus)}`;
+
+document.getElementById(
+    "weekFocus"
+).textContent =
+`今週：${formatTime(weekFocus)}`;
 // ===== ToDo =====
 
 let todos =
