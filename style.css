@@ -30,11 +30,13 @@ header{
 
     border-bottom:2px solid #c8a77f;
 
+    padding:10px clamp(15px,2vw,25px);
+
     display:flex;
 
-    align-items:center;
+    justify-content:space-between;
 
-    padding:10px clamp(15px,2vw,25px);
+    align-items:center;
 
 }
 
@@ -65,52 +67,71 @@ main{
     display:grid;
 
     grid-template-columns:
-
         minmax(250px,300px)
-
         1fr
-
         minmax(250px,300px);
 
-    gap:clamp(15px,2vw,35px);
+    gap:20px;
 
-    padding:clamp(15px,2vw,25px);
+    padding:20px;
+
+    height:calc(100vh - 180px);
 
 }
 
 .left-panel,
 .right-panel{
 
-    position:relative;
+    display:flex;
 
-    z-index:20;
+    flex-direction:column;
 
-    background:rgba(255,255,255,.55);
+    background:rgba(255,255,255,.75);
 
-    backdrop-filter:blur(15px);
+    backdrop-filter:blur(18px);
 
-    padding:25px;
+    min-height:0;
+    height:100%;
+
+    padding:20px;
 
     border-radius:30px;
 
     box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.left-panel{
+
+    gap:18px;
+
+}
+
+.right-panel{
+
+    gap:15px
+
 }
 
 .card{
 
-    background:rgba(255,255,255,.9);
-
-    backdrop-filter:blur(8px);
-
-    border:2px solid #d6b08a;
+    background:white;
 
     border-radius:15px;
 
-    padding:20px;
+    padding:15px;
 
-    margin-top:15px;
+}
 
-    box-shadow:0 5px 15px rgba(0,0,0,.08);
+.left-panel .card{
+
+    margin-top:0;
+
+}
+
+.right-panel .card{
+
+    margin-top:-10px;
 
 }
 
@@ -126,27 +147,22 @@ main{
 .progress{
 
     width:100%;
-
-    height:20px;
-
-    background:#e6e0d8;
-
-    border-radius:20px;
-
+    height:14px;
+    background:#ece8df;
+    border-radius:30px;
     overflow:hidden;
+    margin:18px 0;
 
-    margin:10px 0;
 }
 
 .progress-fill{
 
     width:0%;
-
     height:100%;
+    background:#8daa6b;
+    border-radius:30px;
+    transition:.4s;
 
-    background:#9bb47f;
-
-    transition:.5s;
 }
 
 .center-panel{
@@ -177,7 +193,7 @@ main{
 
     color:#355c30;
 
-    background:rgba(255,255,255,.92);
+    background:rgba(255,255,255,.85);
 
     padding:15px 60px;
 
@@ -195,7 +211,7 @@ main{
 
     position:absolute;
 
-    bottom:35px;
+    bottom:90px;
 
     left:50%;
 
@@ -237,9 +253,11 @@ main{
 
     width:100%;
 
-    padding:15px;
+    height:50px;      /* ← ボタンの高さ */
 
-    margin-top:20px;
+    padding:0;         /* ← paddingは消す */
+
+    margin-top:10px;   /* ← 上の余白を小さく */
 
     border:none;
 
@@ -250,27 +268,26 @@ main{
     color:white;
 
     cursor:pointer;
+
 }
 
 footer{
 
-    width:90%;
-
-    margin:auto;
-
     display:flex;
-
-    gap:40px;
 
     justify-content:center;
 
-    margin-bottom:30px;
+    align-items:center;
+
+    margin:2px auto;
+
+    gap:20px;
 
 }
 
 .footer-btn{
 
-    flex:1;
+    width:220px;
 
     height:60px;
 
@@ -360,40 +377,6 @@ footer{
     cursor:pointer;
 }
 
-
-
-/* 喜びモーション */
-
-.happy{
-
-  animation:
-    happy 0.8s ease;
-}
-
-@keyframes happy{
-
-  0%{
-    transform: translateY(0);
-  }
-
-  25%{
-    transform: translateY(-30px);
-  }
-
-  50%{
-    transform: translateY(0);
-  }
-
-  75%{
-    transform: translateY(-20px);
-  }
-
-  100%{
-    transform: translateY(0);
-  }
-
-}
-
 /* =========================
    キャラクター
 ========================= */
@@ -421,9 +404,9 @@ footer{
 
     position:absolute;
 
-    left:21%;
+    left:24%;
 
-    bottom:70px;
+    bottom:130px;
 
     transform:translateX(-50%);
 
@@ -516,38 +499,7 @@ footer{
 
 }
 
-/* =========================
-   レスポンシブ
-========================= */
 
-@media(max-width:768px){
-
-    main{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .left-panel,
-    .right-panel{
-
-        width:100%;
-
-    }
-
-    .timer{
-
-        font-size:70px;
-
-    }
-
-    #character{
-
-        width:min(80vw,400px);
-
-    }
-
-}
 
 button{
 
@@ -589,19 +541,11 @@ button:active{
 
     height:780px;
 
-    min-height:780px;
-
-    background-image:url("background.png");
-
-    background-repeat:no-repeat;
-
-    background-size:cover;
-
-    background-position:center bottom;
-
     border-radius:30px;
 
     overflow:hidden;
+
+    background:none;
 
 }
 
@@ -619,34 +563,265 @@ button:active{
 
 }
 
+
+#longestFocus{
+
+    margin-top:10px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    color:#4d6b39;
+
+}
+
+/*==========================
+ 集中時間カード
+==========================*/
+
+#longestFocus,
+#todayFocus,
+#weekFocus{
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    margin-top:18px;
+
+    color:#4d6b39;
+
+}
+
+.todo-card{
+
+    flex:1.6;
+
+    display:flex;
+
+    flex-direction:column;
+
+    margin-top:0;
+
+    overflow:hidden;
+
+}
+
+#todoList{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding-right:5px;
+
+}
+
+#longestFocus,
+#todayFocus,
+#weekFocus{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #e8e8e8;
+
+}
+
+.focus-card p{
+
+    font-size:20px;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #ddd;
+
+}
+
+.growth-card{
+
+    min-height:180px;
+
+}
+
 .share-card{
 
     display:flex;
 
     flex-direction:column;
 
-    align-items:center;
+    margin-top:10px;
 
-    gap:20px;
+    height:363px;
+
+}
+
+.share-card h3{
+
+    text-align:left;
+
+    margin-bottom:20px;
+
+}
+
+.share-card p{
+
+    font-size:20px;
+
+    padding:3px 0;
+
+    border-bottom:1px solid #ddd;
 
 }
 
 #shareLevel{
 
-    font-size:42px;
+    font-size:45px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    margin-top:10px;
 
 }
 
 #shareForm{
 
-    font-size:22px;
+    text-align:center;
+
+    border:none;
+
+    font-size:26px;
 
     color:#666;
 
+    margin-bottom:20px;
+
 }
 
-.share-btn{
+.right-panel h2{
 
-    width:100%;
+    font-size:24px;
+
+    font-weight:bold;
+
+    margin:0;
+
+}
+
+.help-btn{
+
+    width:48px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:white;
+
+    font-size:26px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:0 4px 10px rgba(0,0,0,.15);
+
+}
+
+.help-btn:hover{
+
+    background:#f3f3f3;
+
+}
+
+.right-section{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.right-section h2{
+
+    margin-bottom:10px;
+
+}
+
+#todoList::-webkit-scrollbar{
+
+    width:6px;
+
+}
+
+#todoList::-webkit-scrollbar-track{
+
+    background:#eeeeee;
+
+    border-radius:10px;
+
+}
+
+#todoList::-webkit-scrollbar-thumb{
+
+    background:#9bb47f;
+
+    border-radius:10px;
+
+}
+
+#todoList::-webkit-scrollbar-thumb:hover{
+
+    background:#7f9b61;
+
+}
+
+.complete-message{
+
+    position:absolute;
+
+    top:150px;
+
+    left:50%;
+
+    transform:translateX(-50%);
+
+    background:rgba(64,120,50,.92);
+
+    color:white;
+
+    padding:15px 35px;
+
+    border-radius:18px;
+
+    font-size:24px;
+
+    font-weight:bold;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.4s;
+
+    z-index:100;
+
+}
+
+.complete-message.show{
+
+    opacity:1;
 
 }
