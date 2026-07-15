@@ -277,7 +277,7 @@ function updateEvolutionUI(){
     if(remain > 0){
 
         document.getElementById("nextEvolution").textContent =
-            `✨ あと${remain}回集中すると進化！`;
+            `✨ あと${remain}回集中で進化！`;
 
     }else{
 
@@ -296,16 +296,15 @@ function gainExp(amount){
 
     while(exp >= maxExp){
 
-        exp -= maxExp;
+    exp -= maxExp;
 
-        level++;
+    level++;
 
-        maxExp += 20;
+    maxExp += 20;
 
-        alert(
-            `レベルアップ！ Lv.${level}`
-        );
-    }
+    showLevelUpMessage(level);
+
+}
 
     updateLevelUI();
 }
@@ -772,6 +771,25 @@ function showCompleteMessage(){
     },3000);
 
 }
+
+function showLevelUpMessage(level){
+
+    completeMessage.textContent =
+    `🎉 レベルアップ！ Lv.${level}`;
+
+    completeMessage.classList.add("show");
+
+    setTimeout(()=>{
+
+        completeMessage.classList.remove("show");
+
+        completeMessage.textContent =
+        "🎉 5分達成！追加時間を計測中...";
+
+    },2500);
+
+}
+
 
 // ===== BGM ON/OFF =====
 
