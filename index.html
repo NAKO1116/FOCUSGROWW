@@ -12,12 +12,15 @@
 
     <div class="logo">
 
-      <img
-        src="logo.png"
-        alt="FocusGrow"
-        class="logo-image">
+        <img
+            src="logo.png"
+            class="logo-image">
 
     </div>
+
+    <button id="helpBtn" class="help-btn">
+        ⓘ
+    </button>
 
 </header>
 
@@ -41,38 +44,52 @@
 
         </div>
 
-        <div class="card">
+        <div class="card growth-card">
 
-            <h3>成長の記録</h3>
-               
-                <p id="levelText">
-                   Lv.1
-                </p>
+           <h3>🌱 成長の記録</h3>
 
-                <p id="nextExp" class="next-evolution">
-                    次の進化まで あと0回
-                </p>
+          <p id="levelText">
+              ミーネ Lv.1
+          </p>
+
+          <div class="progress">
+
+              <div
+                  id="evolutionBar"
+                  class="progress-fill">
+              </div>
+
+          </div>
+
+          <p id="evolutionText">
+
+              0 / 3 回
+
+          </p>
+
+          <p id="nextEvolution" class="next-evolution">
+
+              ✨ あと3回集中で進化！
+
+          </p>
 
         </div>
  
         <div class="card">
 
-            <h3>ToDoリスト</h3>
+          <h3>集中時間</h3>
 
-            <div class="todo-input-area">
+            <p id="longestFocus">
+                最長集中：00:00
+            </p>
 
-                <input
-                    type="text"
-                    id="todoInput"
-                    placeholder="やることを入力">
+            <p id="todayFocus">
+               今日：00:00
+           </p>
 
-                <button id="addTodoBtn">
-                    追加
-                </button>
-
-            </div>
-
-            <ul id="todoList"></ul>
+           <p id="weekFocus">
+              今週：00:00
+           </p>
 
         </div>
 
@@ -81,6 +98,10 @@
 <section class="center-panel">
 
     <div class="character-stage">
+
+        <div id="completeMessage" class="complete-message">
+           🎉 5分達成！追加時間を計測中...
+        </div>
 
         <div id="timer" class="timer">
             05:00
@@ -111,31 +132,68 @@
 
     <aside class="right-panel">
 
-        <h2>成長記録をみんなと共有</h2>
+    <h2>ToDoリスト</h2>
 
-        <div class="card share-card">
+    <!-- ToDo -->
+    <div class="card todo-card">
 
-         <h3 id="shareLevel">
-            Lv.1
-         </h3>
+        <h3>ToDoリスト</h3>
 
-         <p id="shareForm">
-            ミーネ
-         </p>
+        <div class="todo-input-area">
 
-    <button
-        id="shareBtn"
-        class="share-btn">
+            <input
+                type="text"
+                id="todoInput"
+                placeholder="やること">
 
-        シェア
-
-    </button>
-
-</div>
+            <button id="addTodoBtn">
+                追加
+            </button>
 
         </div>
 
-    </aside>
+        <ul id="todoList"></ul>
+
+    </div>
+
+    <div class="right-section"></div>
+
+    <h2>成長の共有</h2>
+
+    <!-- シェア -->
+    <div class="card share-card" id="shareCard">
+
+        <h3>共有内容</h3>
+
+        <p id="shareLevel">
+            Lv.1
+        </p>
+
+        <p id="shareForm">
+            ミーネ
+        </p>
+
+        <hr>
+
+        <p id="shareBest">
+            最高連続作業日数：0日
+        </p>
+
+        <p id="shareLongest">
+            最長集中時間：0分0秒
+        </p>
+
+        <button
+            id="shareBtn"
+            class="share-btn">
+
+            シェア
+
+        </button>
+
+    </div>
+
+</aside>
 
 </main>
 
@@ -160,6 +218,7 @@ src="alarm.mp3">
     loop>
 </audio>
 
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="script.js"></script>
 
 </body>
